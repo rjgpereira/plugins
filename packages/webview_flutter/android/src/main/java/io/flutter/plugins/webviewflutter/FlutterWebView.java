@@ -21,6 +21,9 @@ import io.flutter.plugin.platform.PlatformView;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.text.StringEscapeUtils;
+
+
 
 public class FlutterWebView implements PlatformView, MethodCallHandler {
   private static final String JS_CHANNEL_NAMES_FIELD = "javascriptChannelNames";
@@ -223,10 +226,15 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
         new android.webkit.ValueCallback<String>() {
           @Override
           public void onReceiveValue(String value) {
-            result.success(value);
+
+            String unscaped = StringEscapeUtils.unescapeJava(value);
+
+            result.success(unscaped);
+
           }
         });
   }
+
 
   @SuppressWarnings("unchecked")
   private void addJavaScriptChannels(MethodCall methodCall, Result result) {
